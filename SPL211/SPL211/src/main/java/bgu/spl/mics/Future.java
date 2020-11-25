@@ -20,7 +20,6 @@ public class Future<T> {
 
 	public Future() {
 		isDone = false;
-		result = null;
 	}
 	
 	/**
@@ -32,7 +31,7 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		while ((result == null)) {
+		while ((!isDone)) {
 			try {
 				wait();
 			}
@@ -68,12 +67,12 @@ public class Future<T> {
      */
 	public T get(long timeout, TimeUnit unit) {
 		try {
-			if(result == null) {
-				unit.timedWait(this,timeout);
+			if(!isDone) {
+				unit.timedWait(Thread.currentThread(),timeout);
 			}
 		}
 		catch (InterruptedException ex) {}
-		if(result != null){
+		if(isDone){
 			return result;
 		}
 		return null;
